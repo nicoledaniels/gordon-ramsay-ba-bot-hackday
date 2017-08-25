@@ -74,7 +74,21 @@ def send_message(recipient_id, message_text):
             "text": message_text
         }
     })
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+    image = json.dumps({
+        "recipient": {
+            "id": "USER_ID"
+        },
+        "message": {
+            "attachment": {
+                "type": "image",
+                "payload": {
+                    "url": message_text,
+                    "is_reusable": true
+                }
+            }
+        }
+    })
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=image)
     if r.status_code != 200:
         log(r.status_code)
         log(r.text)
