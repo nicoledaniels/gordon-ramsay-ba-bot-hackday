@@ -7,7 +7,7 @@ drink = ["drink","beverage","liquid"]
 chicken = ["chicken","wings","poultry","drumsticks","thigh","nugget","tenders","breast"]
 pasta = ["noodle","spaghetti","alfredo","penne","rigatoni","al dente","pasta","cannelloni","fettunccine","linguine","macaroni","noodle","ravioli","rigatoni","tagliatelle","vermicelli"]
 meat = ["meat","steak","ribeye","chops","lamb","venison","beef","pork","belly","rump","bison","bacon","goat","liver","hot dog","jamon","sausage","mutton","turkey","duck","wild boar"]
-pizza = ["pizza","peperoni","margherita"]
+pizza = ["pizza","pepperoni","margherita"]
 catch_all_images = ["http://bit.ly/2w50PPl", "http://bit.ly/2wvacZz", "http://bit.ly/2xzkm8u", "http://bit.ly/2wF5Hfr", "http://bit.ly/2xzpGZn",
 					"http://bit.ly/2msXj9x", "http://bit.ly/2w4OHxW", "http://bit.ly/2xjPNEs", "http://bit.ly/2wNIreM", "http://bit.ly/2wbo7l2", 
 					"http://bit.ly/2iwMg2a", "http://bit.ly/2xzqGg5", "http://bit.ly/2ixG4qL", "http://bit.ly/2wFak9C", "http://bit.ly/2vdMCka", 
