@@ -34,6 +34,6 @@ def classify(msg):
       elif word in meat:
         return "https://media3.giphy.com/media/we4Hp4J3n7riw/giphy.gif"
       elif word in pizza:
-        return "https://media.giphy.com/media/2FaztatdwiCRrkPCg/giphy.gif"
-      else: 
-      	return catch_all_images[random.randint(0, len(catch_all_images) - 1)]
+        return "https://media.giphy.com/media/2FaztatdwiCRrkPCg/giphy.gif" 
+      
+    return catch_all_images[random.randint(0, len(catch_all_images) - 1)]
