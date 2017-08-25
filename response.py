@@ -19,13 +19,13 @@ def classify(msg):
     msg = re.sub(r'[^\w\s]','',msg)
     msg = msg.lower()
     msg = msg.split()
-    
-    print(msg)
 
     for word in msg:
-      print(word)
+      if word == "beef":
+        return "https://s21.postimg.org/md55v1c1z/gordon_r.jpg"
+      elif word == "sandwich":
+        return "https://media.giphy.com/media/x8ivvK7aYNCnu/giphy.gif"
       if word in drink:
-        print(word in drink)
         return "https://media.giphy.com/media/ZXW1OXBCTRF2o/giphy.gif"
       elif word in chicken:
         return "https://media3.giphy.com/media/kzidPabWvU6pG/giphy.gif"
