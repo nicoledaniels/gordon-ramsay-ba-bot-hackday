@@ -18,6 +18,8 @@ def classify(msg):
     msg = msg.lower()
     msg = msg.split()
     
+    print(msg)
+    
     for word in msg:
       if word in drink:
         return "https://media.giphy.com/media/ZXW1OXBCTRF2o/giphy.gif"
