@@ -76,14 +76,14 @@ def send_message(recipient_id, message_text):
     })
     image = json.dumps({
         "recipient": {
-            "id": "USER_ID"
+            "id": recipient_id
         },
         "message": {
             "attachment": {
                 "type": "image",
                 "payload": {
                     "url": message_text,
-                    "is_reusable": true
+                    "is_reusable": True
                 }
             }
         }
