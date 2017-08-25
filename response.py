@@ -7,5 +7,5 @@ def classify(msg):
     msg = msg.strip()
     msg = msg.lower()
     
-    if(msg in drink):
+    if(drink in msg):
        return "https://media.giphy.com/media/ZXW1OXBCTRF2o/giphy.gif"
