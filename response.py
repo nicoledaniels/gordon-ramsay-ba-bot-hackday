@@ -16,9 +16,9 @@ catch_all_images = ["http://bit.ly/2w50PPl", "http://bit.ly/2wvacZz", "http://bi
 
 def classify(msg):
     msg = msg.strip()
+    msg = re.sub(r'[^\w\s]','',msg)
     msg = msg.lower()
     msg = msg.split()
-    msg = re.sub(r'[^\w\s]','',msg)
     
     print(msg)
 
