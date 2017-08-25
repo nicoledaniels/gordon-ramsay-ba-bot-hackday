@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+import re
 
 drink = ["drink","beverage","liquid"]
 chicken = ["chicken","wings","poultry","drumsticks","thigh","nugget","tenders","breast"]
@@ -17,19 +18,22 @@ def classify(msg):
     msg = msg.strip()
     msg = msg.lower()
     msg = msg.split()
+    msg = re.sub(r'[^\w\s]','',msg)
     
     print(msg)
-    
+
     for word in msg:
+      print(word)
       if word in drink:
+        print(word in drink)
         return "https://media.giphy.com/media/ZXW1OXBCTRF2o/giphy.gif"
-      if word in chicken:
+      elif word in chicken:
         return "https://media3.giphy.com/media/kzidPabWvU6pG/giphy.gif"
-      if word in pasta:
+      elif word in pasta:
         return "http://i0.kym-cdn.com/photos/images/original/000/732/862/9b0.png"
-      if word in meat:
+      elif word in meat:
         return "https://media3.giphy.com/media/we4Hp4J3n7riw/giphy.gif"
-      if word in pizza:
+      elif word in pizza:
         return "https://media.giphy.com/media/2FaztatdwiCRrkPCg/giphy.gif"
       else: 
       	return catch_all_images[random.randint(0, len(catch_all_images) - 1)]
