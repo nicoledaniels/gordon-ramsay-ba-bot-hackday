@@ -1,39 +1,43 @@
-import os
-import sys
-import random
 import re
-
-drink = ["drink","beverage","liquid"]
-chicken = ["chicken","wings","poultry","drumsticks","thigh","nugget","tenders","breast"]
-pasta = ["noodle","spaghetti","alfredo","penne","rigatoni","al dente","pasta","cannelloni","fettunccine","linguine","macaroni","noodle","ravioli","rigatoni","tagliatelle","vermicelli"]
-meat = ["meat","steak","ribeye","chops","lamb","venison","beef","pork","belly","rump","bison","bacon","goat","liver","hot dog","jamon","sausage","mutton","turkey","duck","wild boar"]
-pizza = ["pizza","pepperoni","margherita"]
-catch_all_images = ["http://bit.ly/2w50PPl", "http://bit.ly/2wvacZz", "http://bit.ly/2xzkm8u", "http://bit.ly/2wF5Hfr", "http://bit.ly/2xzpGZn",
-					"http://bit.ly/2msXj9x", "http://bit.ly/2w4OHxW", "http://bit.ly/2xjPNEs", "http://bit.ly/2wNIreM", "http://bit.ly/2wbo7l2", 
-					"http://bit.ly/2iwMg2a", "http://bit.ly/2xzqGg5", "http://bit.ly/2ixG4qL", "http://bit.ly/2wFak9C", "http://bit.ly/2vdMCka", 
-					"http://bit.ly/2wbGlTm", "http://bit.ly/2w503SD", "http://bit.ly/2xzldGh", "http://bit.ly/2gc001A", "http://bit.ly/2wv5OKa", 
-					"http://gph.is/2xzJj3G"]
+from food_items import chicken
+from food_items import drink
+from food_items import meat
+from food_items import pasta
+from food_items import pizza
+from food_items import other
 
 def classify(msg):
-    msg = msg.strip()
-    msg = re.sub(r'[^\w\s]','',msg)
-    msg = msg.lower()
-    msg = msg.split()
+    # Classify the message based on what words the user sent
+    # If an appropriate image for a Sustenance class is found,
+    # return it
+    # If not, return a random Gordon Ramsay image
 
-    for word in msg:
-      if word == "beef":
-        return "https://s21.postimg.org/md55v1c1z/gordon_r.jpg"
-      elif word == "sandwich":
-        return "https://media.giphy.com/media/x8ivvK7aYNCnu/giphy.gif"
-      if word in drink:
-        return "https://media.giphy.com/media/ZXW1OXBCTRF2o/giphy.gif"
-      elif word in chicken:
-        return "https://media3.giphy.com/media/kzidPabWvU6pG/giphy.gif"
-      elif word in pasta:
-        return "http://i0.kym-cdn.com/photos/images/original/000/732/862/9b0.png"
-      elif word in meat:
-        return "https://media3.giphy.com/media/we4Hp4J3n7riw/giphy.gif"
-      elif word in pizza:
-        return "https://media.giphy.com/media/2FaztatdwiCRrkPCg/giphy.gif" 
-      
-    return catch_all_images[random.randint(0, len(catch_all_images) - 1)]
+    word_list = message_to_word_list(msg)
+    return random_image_url(word_list)
+
+def message_to_word_list(message):
+    # Split the string into its individual words
+
+    message = message.strip()
+    message = re.sub(r'[^\w\s]', '', message)
+    message = message.lower().split()
+
+    return message
+
+def random_image_url(word_list):
+    # Using the words the user has sent,
+    # return a random image url in the appropriate class' image store
+
+    image_url = ""
+    for word in word_list:
+      if word in chicken.Chicken().alias:
+        return chicken.Chicken().random_image_url()
+      elif word in drink.Drink().alias:
+        return drink.Drink().random_image_url()
+      elif word in meat.Meat().alias:
+        return meat.Meat().random_image_url()
+      elif word in pasta.Pasta().alias:
+        return pasta.Pasta().random_image_url()
+      elif word in pizza.Pizza().alias:
+        return pizza.Pizza().random_image_url()
+    return other.Other().random_image_url()

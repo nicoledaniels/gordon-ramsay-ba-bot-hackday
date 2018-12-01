@@ -2,97 +2,62 @@ import os
 import sys
 import json
 import response
-
 import requests
+import send_message
 from flask import Flask, request
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['GET'])
-def verify():
-    # when the endpoint is registered as a webhook, it must echo back
-    # the 'hub.challenge' value it receives in the query arguments
-    if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
-        if not request.args.get("hub.verify_token") == os.environ["VERIFY_TOKEN"]:
-            return "Verification token mismatch", 403
-        return request.args["hub.challenge"], 200
+def verify_request():
+    # Facebook sends a verification token to guarantee that a malicious
+    # actor isn't sending us fake requests
+    # Validate the received token with our token
 
-    return "Hello world", 200
-
+    received_token = request.args.get("hub.verify_token")
+    return verify_token(received_token)
 
 @app.route('/', methods=['POST'])
-def webhook():
-
+def send_response():
     # endpoint for processing incoming messaging events
 
     data = request.get_json()
-    log(data)  # you may not want to log every incoming message in production, but it's good for testing
+    log(data)
 
-    if data["object"] == "page":
+    for event in data["entry"]:
+        for messaging_event in event["messaging"]:
+            message = messaging_event.get("message")
+            recipient_id = messaging_event["sender"]["id"]
+            if message.get("text"):
+                message_text = message.get("text")
+                response_message = response.classify(message_text)
+                send_message.send_image_message(recipient_id, str(response_message))
+            elif message.get("attachment") and message.get("attachment")["type"] == "image":
+                message_text = self.classify_attachment(message["attachment"])
+                response_message = response.classify(message_text)
+                send_message.send_image_message(recipient_id, str(response_message))
+            else:
+                response_message = "I'm sure this food is dreadful, but I only accept text and images"
+                send_message.send_text_message(recipient_id, str(response_message))
 
-        for entry in data["entry"]:
-            for messaging_event in entry["messaging"]:
+    return "Success", 200
 
-                if messaging_event.get("message"):  # someone sent us a message
+def classify_attachment(attachment):
+    payload = attachment["payload"]
 
-                    sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
-                    recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
-                    try:
-                        message_text = messaging_event["message"]["text"]  # the message's text
-                    except Exception as inst:
-                        return "ok",200
+def verify_token(received_token):
+    # If tokens match, allow the program to continue execution
+    # Otherwise, a malicious actor is sending us requests, return error
 
-                    response_message = response.classify(message_text)
+    if received_token == os.environ['VERIFY_TOKEN']:
+        return request.args.get("hub.challenge")
+    return "Verification token mismatch", 403
 
-                    send_message(sender_id, str(response_message))
+def log(message):
+  # simple wrapper for logging to stdout on the console
 
-                if messaging_event.get("delivery"):  # delivery confirmation
-                    pass
-
-                if messaging_event.get("optin"):  # optin confirmation
-                    pass
-
-                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
-                    pass
-
-    return "ok", 200
-
-
-def send_message(recipient_id, url):
-
-    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=url))
-
-    params = {
-        "access_token": os.environ["PAGE_ACCESS_TOKEN"]
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    image = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "attachment": {
-                "type": "image",
-                "payload": {
-                    "url": url,
-                    "is_reusable": True
-                }
-            }
-        }
-    })
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=image)
-    if r.status_code != 200:
-        log(r.status_code)
-        log(r.text)
-
-
-def log(message):  # simple wrapper for logging to stdout on heroku
-    print str(message)
-    sys.stdout.flush()
-
+  print str(message)
+  sys.stdout.flush()
 
 if __name__ == '__main__':
     app.run(debug=True)
