@@ -29,11 +29,7 @@ def send_image_message(recipient_id, url):
         }
     })
 
-    request = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=image)
-
-    if request.status_code != 200:
-        log_error_responses(request)
-      
+    post_and_log_failure(params, headers, image)
 
 def send_text_message(recipient_id, text):
     log("Sending message to {recipient}: {text}".format(recipient=recipient_id, text=text))
@@ -47,7 +43,10 @@ def send_text_message(recipient_id, text):
       }  
     })
 
-    request = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, json=payload)
+    post_and_log_failure(params, headers, payload)
+
+def post_and_log_failure(params, headers, data):
+    request = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
 
     if request.status_code != 200:
         log_error_responses(request)
@@ -57,7 +56,7 @@ def log_error_responses(request):
     log(request.text)
 
 def log(message):  
-  # simple wrapper for logging to stdout on the console
+    # simple wrapper for logging to stdout on the console
 
-  print str(message)
-  sys.stdout.flush()
+    print str(message)
+    sys.stdout.flush()

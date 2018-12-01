@@ -5,18 +5,30 @@ from food_items import meat
 from food_items import pasta
 from food_items import pizza
 from food_items import other
+from image_detection import get_relevant_tags
 
-def classify(msg):
+def classify_text(msg):
     # Classify the message based on what words the user sent
     # If an appropriate image for a Sustenance class is found,
     # return it
     # If not, return a random Gordon Ramsay image
 
-    word_list = message_to_word_list(msg)
+    word_list = message_to_word_list(msg) if type(msg) is str else msg
     return random_image_url(word_list)
 
+def classify_attachment(attachment):
+    # To classify this image, we need to use the Clarifai API to determine
+    # the components of the image
+    # Send a list of image tags to the classify text method in order to obtain
+    # a relevant gif/image
+
+    payload = attachment.get('payload')
+    image_url = payload.get('url')
+    image_tags = get_relevant_tags(image_url)
+    return classify_text(image_tags)
+
 def message_to_word_list(message):
-    # Split the string into its individual words
+    # Split the message into an array of its words
 
     message = message.strip()
     message = re.sub(r'[^\w\s]', '', message)

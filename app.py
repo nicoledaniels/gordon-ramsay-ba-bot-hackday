@@ -1,9 +1,7 @@
 import os
 import sys
-import json
-import response
-import requests
-import send_message
+from classification import classify_text, classify_attachment
+from send_message import send_image_message, send_text_message
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -30,20 +28,16 @@ def send_response():
             recipient_id = messaging_event["sender"]["id"]
             if message.get("text"):
                 message_text = message.get("text")
-                response_message = response.classify(message_text)
-                send_message.send_image_message(recipient_id, str(response_message))
-            elif message.get("attachment") and message.get("attachment")["type"] == "image":
-                message_text = self.classify_attachment(message["attachment"])
-                response_message = response.classify(message_text)
-                send_message.send_image_message(recipient_id, str(response_message))
+                response_message = classify_text(message_text)
+                send_image_message(recipient_id, str(response_message))
+            elif message.get("attachments")[0] and message.get("attachments")[0]["type"] == "image":
+                response_message = classify_attachment(message.get("attachments")[0])
+                send_image_message(recipient_id, str(response_message))
             else:
                 response_message = "I'm sure this food is dreadful, but I only accept text and images"
-                send_message.send_text_message(recipient_id, str(response_message))
+                send_text_message(recipient_id, str(response_message))
 
     return "Success", 200
-
-def classify_attachment(attachment):
-    payload = attachment["payload"]
 
 def verify_token(received_token):
     # If tokens match, allow the program to continue execution
@@ -54,10 +48,10 @@ def verify_token(received_token):
     return "Verification token mismatch", 403
 
 def log(message):
-  # simple wrapper for logging to stdout on the console
+    # simple wrapper for logging to stdout on the console
 
-  print str(message)
-  sys.stdout.flush()
+    print str(message)
+    sys.stdout.flush()
 
 if __name__ == '__main__':
     app.run(debug=True)
