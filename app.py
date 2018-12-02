@@ -1,6 +1,7 @@
 import os
 import sys
 from classification import classify_text, classify_attachment
+from logging import log
 from send_message import send_image_message, send_text_message
 from flask import Flask, request
 
@@ -46,12 +47,6 @@ def verify_token(received_token):
     if received_token == os.environ['VERIFY_TOKEN']:
         return request.args.get("hub.challenge")
     return "Verification token mismatch", 403
-
-def log(message):
-    # simple wrapper for logging to stdout on the console
-
-    print str(message)
-    sys.stdout.flush()
 
 if __name__ == '__main__':
     app.run(debug=True)

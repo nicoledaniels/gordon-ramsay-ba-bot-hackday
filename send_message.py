@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import requests
+from logging import log
 
 params = {
     "access_token": os.environ["PAGE_ACCESS_TOKEN"]
@@ -54,9 +55,3 @@ def post_and_log_failure(params, headers, data):
 def log_error_responses(request):
     log(request.status_code)
     log(request.text)
-
-def log(message):  
-    # simple wrapper for logging to stdout on the console
-
-    print str(message)
-    sys.stdout.flush()
