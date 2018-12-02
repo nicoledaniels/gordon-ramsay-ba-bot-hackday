@@ -13,7 +13,10 @@ def classify_text(msg):
     # return it
     # If not, return a random Gordon Ramsay image
 
-    word_list = message_to_word_list(msg) if type(msg) is str else msg
+    if type(msg) is str or type(msg) is unicode:
+      word_list = message_to_word_list(msg)
+    else:
+      word_list = msg
     return random_image_url(word_list)
 
 def classify_attachment(attachment):
