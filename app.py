@@ -1,7 +1,7 @@
 import os
 import sys
 from classification import classify_text, classify_attachment
-from logging import log
+from heroku_logging import log
 from send_message import send_image_message, send_text_message
 from flask import Flask, request
 

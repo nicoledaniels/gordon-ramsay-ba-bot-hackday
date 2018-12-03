@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import requests
-from logging import log
+from heroku_logging import log
 
 params = {
     "access_token": os.environ["PAGE_ACCESS_TOKEN"]
